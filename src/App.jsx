@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import "./App.css";
+import MovieSearch from "./MovieSearch.jsx";
+import MovieDisplay from "./MovieDisplay.jsx";
+import { useState, useEffect } from "react";
 function App() {
-  const [count, setCount] = useState(0)
+  // 6f956ef3
+  // example title search: http://www.omdbapi.com/?t=Blade+Runner&y=1982&apikey=6f956ef3
+  // example general search:
+  const [movies, setMovies] = useState([]);
+  const [search, setSearch] = useState("");
 
+  async function fetchMovie() {
+    const url = `http://www.omdbapi.com/?s=batman&apikey=6f956ef3`;
+    const rawData = await fetch(url);
+    const jsonData = await rawData.json();
+    console.log(jsonData);
+    setMovies(jsonData.Search);
+  }
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ padding: "2rem" }}>
+      <main>
+        <MovieSearch
+          search={search}
+          setSearch={setSearch}
+          fetchMovie={fetchMovie}
+        ></MovieSearch>
+        <MovieDisplay movies={movies}></MovieDisplay>
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
